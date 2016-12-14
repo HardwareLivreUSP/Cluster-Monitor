@@ -15,7 +15,7 @@ const spawn = require('child_process').spawn;
         openssl.stdin.write(data);
         openssl.stdin.end();
         openssl.stdout.on('data', function (data) {
-            console.log(data;
+            console.log(data);
         });
     });
 
