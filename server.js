@@ -33,11 +33,11 @@ const server_cluster = net.createServer( function (client) {
 
 });
 
-server.on('error',  function (err) {
+server_cluster .on('error',  function (err) {
     throw err;
 });
 
-server.listen(7001, function () {
+server_cluster.listen(7001, function () {
     console.log('server bound');
 });
 
