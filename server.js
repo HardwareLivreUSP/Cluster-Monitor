@@ -1,18 +1,23 @@
 const net = require('net');
-const server = net.createServer( function (c) {
+const server = net.createServer( function (client) {
   // 'connection' listener
-  console.log('client connected');
-  c.on('end', function () {
-    console.log('client disconnected');
-  });
-  c.write('hello\r\n');
-  c.pipe(c);
+  clientonsole.log('client connected');
+
+    client.on('end', function () {
+        console.log('client disconnected');
+    });
+
+    client.on('data', function (data) {
+        console.log(data.toString());
+        client.end();
+    });
+
 });
 
 server.on('error',  function (err) {
-  throw err;
+    throw err;
 });
 
 server.listen(7001, function () {
-  console.log('server bound');
+    console.log('server bound');
 });
