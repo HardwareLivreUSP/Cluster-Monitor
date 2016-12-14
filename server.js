@@ -12,11 +12,13 @@ const spawn = require('child_process').spawn;
         var string = data.toString();
         client.end();
         openssl = spawn('openssl', ['rsautl', '-decrypt', '-inkey', 'server_private_key.pem']);
-        openssl.stdin.write(data);
-        openssl.stdin.end();
+        
         openssl.stdout.on('data', function (data) {
             console.log(data);
         });
+
+        openssl.stdin.write(data);
+        openssl.stdin.end();
     });
 
 });
