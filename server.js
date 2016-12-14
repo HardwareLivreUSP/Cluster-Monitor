@@ -1,6 +1,10 @@
-const net = require('net');
+var net = require('net');
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+var spawn = require('child_process').spawn;
+
 const server = net.createServer( function (client) {
-const spawn = require('child_process').spawn;
     // 'connection' listener
     //console.log('client connected');
 
@@ -35,4 +39,17 @@ server.on('error',  function (err) {
 
 server.listen(7001, function () {
     console.log('server bound');
+});
+
+server.listen(8002);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
 });
