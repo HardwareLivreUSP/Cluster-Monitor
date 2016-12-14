@@ -1,16 +1,16 @@
 const net = require('net');
 
-const client = net.createConnection({port: 7001, () => {
+const client = net.createConnection({port: 8124}, function() {
   //'connect' listener
   console.log('connected to server!');
   client.write('world!\r\n');
 });
 
-client.on('data', (data) => {
+client.on('data', function (data) {
   console.log(data.toString());
   client.end();
 });
 
-client.on('end', () => {
+client.on('end', function () {
   console.log('disconnected from server');
 });
