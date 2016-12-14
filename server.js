@@ -12,10 +12,18 @@ const spawn = require('child_process').spawn;
         var string = data.toString();
         client.end();
         openssl = spawn('openssl', ['rsautl', '-decrypt', '-inkey', 'server_private_key.pem']);
-        
+
         openssl.stdout.on('data', function (data) {
             console.log(data);
         });
+
+        openssl.stderr.on('data', function (data){
+  console.log(`stderr: ${data}`);
+});
+
+openssl.on('close', function (code) {
+  console.log(`child process exited with code ${code}`);
+});
 
         openssl.stdin.write(data);
         openssl.stdin.end();
