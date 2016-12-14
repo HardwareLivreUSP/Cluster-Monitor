@@ -4,7 +4,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var spawn = require('child_process').spawn;
 
-const server = net.createServer( function (client) {
+const server_cluster = net.createServer( function (client) {
     // 'connection' listener
     //console.log('client connected');
 
