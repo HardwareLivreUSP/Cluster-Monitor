@@ -1,7 +1,7 @@
 const net = require('net');
 const server = net.createServer( function (client) {
   // 'connection' listener
-  clientonsole.log('client connected');
+  console.log('client connected');
 
     client.on('end', function () {
         console.log('client disconnected');
