@@ -1,11 +1,11 @@
 const net = require('net');
 const server = net.createServer( function (client) {
 const spawn = require('child_process').spawn;
-  // 'connection' listener
-  console.log('client connected');
+    // 'connection' listener
+    //console.log('client connected');
 
     client.on('end', function () {
-        console.log('client disconnected');
+        // console.log('client disconnected');
     });
 
     client.on('data', function (data) {
@@ -16,7 +16,7 @@ const spawn = require('child_process').spawn;
         openssl.stdout.on('data', function (data) {
             var str = data.toString();
             var res = str.split('\n');
-            console.log(res[0]);
+            console.log("> recebido de "+res[0]);
         });
 
         openssl.stderr.on('data', function (data){
