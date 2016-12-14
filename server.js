@@ -14,7 +14,7 @@ const spawn = require('child_process').spawn;
         openssl = spawn('openssl', ['rsautl', '-decrypt', '-inkey', 'server_private_key.pem']);
 
         openssl.stdout.on('data', function (data) {
-            console.log(data);
+            console.log(data.toString());
         });
 
         openssl.stderr.on('data', function (data){
