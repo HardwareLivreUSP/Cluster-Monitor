@@ -1,0 +1,1 @@
+(echo gl1; cat /proc/stat | grep cpu) | openssl rsautl -encrypt -inkey server_public_key.pem -pubin | openssl enc -base64 | 
