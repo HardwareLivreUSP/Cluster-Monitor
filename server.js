@@ -44,7 +44,7 @@ server_cluster.listen(7001, function () {
 server.listen(8002);
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function (socket) {
