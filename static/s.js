@@ -30,7 +30,7 @@ var line = d3.line()
 socket.on('pcs', function(pcs_avalible) {
 
     var clusters = pcs_avalible.map(function(d){
-      return {id: d, values: []};
+      return {id: d, values: [], in:[]};
     });
 
     console.log(clusters);
@@ -87,16 +87,56 @@ socket.on('pcs', function(pcs_avalible) {
 
 
     socket.on('info', function(data) {
-        clusters[0].values.push({
-            value: Math.random() * 100,
+
+        var index = pcs_avalible.indexOf(data.cpu);
+        var ca = clusters[index];
+        ca.in.push(data.v);
+        if (ca.in.length >= 2) {
+          var atu = ca.in[ca.in.length-1];
+          var prev = ca.in[ca.in.length-2];
+
+          var user = atu[1];
+          var nice = atu[2];
+          var system = atu[3];
+          var idle = atu[4];
+          var iowait = atu[5];
+          var irq = atu[6];
+          var softirq = atu[7];
+          var steal = atu[8];
+          var guest = atu[9];
+          var guest_nice = atu[10];
+
+          var prevuser = prev[1];
+          var prevnice = prev[2];
+          var prevsystem = prev[3];
+          var previdle = prev[4];
+          var previowait = prev[5];
+          var previrq = prev[6];
+          var prevsoftirq = prev[7];
+          var prevsteal = prev[8];
+          var prevguest = prev[9];
+          var prevguest_nice = prev[10];
+
+          var PrevIdle = previdle + previowait;
+          var Idle = idle + iowait;
+
+          var PrevNonIdle = prevuser + prevnice + prevsystem + previrq + prevsoftirq + prevsteal;
+          var NonIdle = user + nice + system + irq + softirq + steal;
+
+          var PrevTotal = PrevIdle + PrevNonIdle;
+          var Total = Idle + NonIdle;
+
+          // differentiate: actual value minus the previous one
+          var totald = Total - PrevTotal;
+          var idled = Idle - PrevIdle;
+
+          var CPU_Percentage = (totald - idled)/totald;
+
+          ca.values.push({
+            value: CPU_Percentage,
             date: new Date()
-        });
-        clusters[1].values.push({
-            value: Math.random() * 100,
-            date: new Date()
-        });
-        if (clusters[0].values.length > 70) clusters[0].values.shift();
-        if (clusters[1].values.length > 70) clusters[1].values.shift();
+          });
+        }
 
 
         x.domain([
