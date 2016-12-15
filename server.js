@@ -23,11 +23,16 @@ const server_cluster = net.createServer( function (client) {
         openssl.stdout.on('data', function (data) {
             var str = data.toString();
             var res = str.split('\n');
-            res[1].foreach(function (x) { 
-                return parseInt(x, 10); 
-            });
-            console.log(res[1]);
-            io.emit('info', { cpu: res[0], v: result });
+            var values = res[1].split(' ');
+
+            for (var i = 0, len = values.length; i < len; i++) {
+                values[i] = parseInt(values[i], 10); 
+            }
+            values.slice(1,1);
+
+            console.log(values);
+
+            io.emit('info', { cpu: res[0], v: values });
             console.log("> recebido de "+res[0]);
         });
 
