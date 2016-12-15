@@ -1,9 +1,10 @@
 var socket = io.connect('http://cluster.capella.pro/');
 
+var low;
 var svg = d3.select("svg"),
     margin = {
         top: 20,
-        right: 80,
+        right: 40,
         bottom: 30,
         left: 50
     },
@@ -30,23 +31,13 @@ var line = d3.line()
 socket.on('pcs', function(pcs_avalible) {
 
     var clusters = pcs_avalible.map(function(d){
+      $("#tb").append("<tr><td>"+d.toUpperCase()+"</td><td id=\"s_"+d+"\"></td><td id=\"cpu_"+d+"\"></td></tr>");
       return {id: d, values: [], in:[]};
     });
 
     console.log(clusters);
 
-    x.domain([
-        d3.min(clusters, function(c) {
-            return d3.min(c.values, function(d) {
-                return d.date;
-            });
-        }),
-        d3.max(clusters, function(c) {
-            return d3.max(c.values, function(d) {
-                return d.date;
-            });
-        })
-    ]);
+    x.domain([new Date((new Date()).getTime()-3*60000), new Date()]);
 
     y.domain([0, 100]);
 
@@ -87,6 +78,8 @@ socket.on('pcs', function(pcs_avalible) {
 
 
     socket.on('info', function(data) {
+
+        low = new Date((new Date()).getTime()-3*60000);
 
         var index = pcs_avalible.indexOf(data.cpu);
         if (index == -1) {
@@ -143,31 +136,21 @@ socket.on('pcs', function(pcs_avalible) {
               date: new Date()
             });
 
-            console.log(ca.id+" "+CPU_Percentage);
+            $("#cpu_"+ca.id).text(CPU_Percentage);
 
-            if (ca.values.length > 100) ca.values.shift();
+            if (ca.values[0].date <= low) ca.values.shift();
 
           }
         }
 
 
-        x.domain([
-            d3.min(clusters, function(c) {
-                return d3.min(c.values, function(d) {
-                    return d.date;
-                });
-            }),
-            d3.max(clusters, function(c) {
-                return d3.max(c.values, function(d) {
-                    return d.date;
-                });
-            })
-        ]);
+
+        x.domain([low, new Date()]);
 
 
         svg.select(".x.axis")
             .transition() // change the x axis
-            .duration(500)
+            .duration(1000)
             .call(d3.axisBottom(x));
 
 
@@ -176,8 +159,6 @@ socket.on('pcs', function(pcs_avalible) {
 
         // sub selection to transition line   
         pc.select(".line")
-            .transition()
-            .duration(0)
             .attr("d", function(d) {
                 return line(d.values);
             })
