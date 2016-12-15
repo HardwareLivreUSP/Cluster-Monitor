@@ -4,6 +4,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var spawn = require('child_process').spawn;
 
+app.use(express.static('static'))
+
 const server_cluster = net.createServer( function (client) {
     // 'connection' listener
     //console.log('client connected');
@@ -20,7 +22,7 @@ const server_cluster = net.createServer( function (client) {
         openssl.stdout.on('data', function (data) {
             var str = data.toString();
             var res = str.split('\n');
-            io.emit('info', { cpu: res[0], v: res[1].split(' '); });
+            io.emit('info', { cpu: res[0], v: res[1].split(' ') });
             console.log("> recebido de "+res[0]);
         });
 
@@ -45,7 +47,7 @@ server_cluster.listen(7001, function () {
 server.listen(8002);
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/static/index.html');
 });
 
 io.on('connection', function (socket) {
