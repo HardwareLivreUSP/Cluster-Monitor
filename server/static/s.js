@@ -19,7 +19,7 @@ var x = d3.scaleTime().range([0, width]),
     z = d3.scaleOrdinal(d3.schemeCategory10);
 
 var line = d3.line()
-    .curve(d3.curveBasis)
+    .curve(d3.curveMonotoneX)
     .x(function(d) {
         return x(d.date);
     })
@@ -31,7 +31,7 @@ var line = d3.line()
 socket.on('pcs', function(pcs_avalible) {
 
     var clusters = pcs_avalible.map(function(d){
-      $("#tb").append("<tr><td>"+d.toUpperCase()+"</td><td id=\"s_"+d+"\"></td><td id=\"cpu_"+d+"\"></td></tr>");
+      $("#tb").append("<tr><td>"+d.toUpperCase()+"</td><td><div class='progress'> <div class='progress-bar' style='width: 10%;' id=\"cpu_"+d+"\"> ... </div> </div></td></tr>");
       return {id: d, values: [], in:[]};
     });
 
@@ -79,7 +79,6 @@ socket.on('pcs', function(pcs_avalible) {
 
     socket.on('info', function(data) {
 
-        low = new Date((new Date()).getTime()-3*60000);
 
         var index = pcs_avalible.indexOf(data.cpu);
         if (index == -1) {
@@ -136,22 +135,37 @@ socket.on('pcs', function(pcs_avalible) {
               date: new Date()
             });
 
-            $("#cpu_"+ca.id).text(CPU_Percentage);
+            $("#cpu_"+ca.id).text(CPU_Percentage.toFixed(2));
+            $("#cpu_"+ca.id).width(CPU_Percentage.toFixed(0)+"%");
 
+            if (ca.values[0].date <= low) ca.values.shift();
             if (ca.values[0].date <= low) ca.values.shift();
 
           }
         }
 
+    });
 
-
+    setInterval(function(){
+        var now =  new Date();
+        low = new Date((new Date()).getTime()-3*60000);
         x.domain([low, new Date()]);
 
 
         svg.select(".x.axis")
             .transition() // change the x axis
-            .duration(1000)
+            .duration(500)
             .call(d3.axisBottom(x));
+
+        clusters.forEach(function (ca) {
+            if (ca.values.length >= 1) {
+                if (now.getTime() - ca.values[ca.values.length-1].date.getTime() > 3300) {
+                    $("#cpu_"+ca.id).addClass("progress-bar-warning");
+                } else {
+                    $("#cpu_"+ca.id).removeClass("progress-bar-warning");
+                }
+            }
+        });
 
 
         var pc = svg.selectAll(".pc")
@@ -166,6 +180,6 @@ socket.on('pcs', function(pcs_avalible) {
                 return z(d.id);
             });
 
-    });
+    }, 700);
 
 });
