@@ -88,9 +88,12 @@ socket.on('pcs', function(pcs_avalible) {
 
     socket.on('info', function(data) {
 
+      console.log(data);
+
         var index = pcs_avalible.indexOf(data.cpu);
         var ca = clusters[index];
         ca.in.push(data.v);
+
         if (ca.in.length >= 2) {
           var atu = ca.in[ca.in.length-1];
           var prev = ca.in[ca.in.length-2];
