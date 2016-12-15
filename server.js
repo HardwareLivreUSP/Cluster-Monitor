@@ -28,7 +28,7 @@ const server_cluster = net.createServer( function (client) {
             for (var i = 0, len = values.length; i < len; i++) {
                 values[i] = parseInt(values[i], 10); 
             }
-
+            values.splice(1, 1);
             console.log(values);
 
             io.emit('info', { cpu: res[0], v: values });
