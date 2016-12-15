@@ -1,0 +1,13 @@
+#! /bin/sh
+rm -rf /etc/clustermonitor
+rm -rf /usr/sbin/cclient
+rm -rf /etc/init.d/clustermonitor
+mkdir /etc/clustermonitor
+chmod u+x clustermonitor*
+cp cclient /usr/sbin/
+cp clustermonitor /etc/init.d/
+cp ../keys/server_public_key.pem /etc/clustermonitor/
+echo "Instalando cliente em $1."
+echo $1 > /etc/clustermonitor/name
+update-rc.d clustermonitor defaults
+update-rc.d clustermonitor enable
