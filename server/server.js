@@ -18,7 +18,7 @@ const server_cluster = net.createServer( function (client) {
     client.on('data', function (data) {
         var string = data.toString();
         client.end();
-        openssl = spawn('openssl', ['rsautl', '-decrypt', '-inkey', 'server_private_key.pem']);
+        openssl = spawn('openssl', ['rsautl', '-decrypt', '-inkey', '../keys/server_private_key.pem']);
 
         openssl.stdout.on('data', function (data) {
             var str = data.toString();
