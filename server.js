@@ -23,7 +23,7 @@ const server_cluster = net.createServer( function (client) {
         openssl.stdout.on('data', function (data) {
             var str = data.toString();
             var res = str.split('\n');
-            res[1].forEach(function (x) { 
+            res[1].foreach(function (x) { 
                 return parseInt(x, 10); 
             });
             console.log(res[1]);
