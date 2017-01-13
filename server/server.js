@@ -101,7 +101,7 @@ var r = true;
 function run_next ()  {
     if (r && queue.length > 0) {
         r = false;
-        var fname = queue.shift();
+        var fname = queue.shift().name;
         io.emit('log', {
             msg: "--------------------------------------------\nIniciando processo do arquivo " + fname
         });
