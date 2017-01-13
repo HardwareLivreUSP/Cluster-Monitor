@@ -151,6 +151,7 @@ function run_next ()  {
                                     msg: "Erro ao copiar para todos."
                                 });
                             }
+                            run_next ();
                         });
                     } else {
                         io.emit('log', {
@@ -160,6 +161,5 @@ function run_next ()  {
                 });
             }
         });
-        run_next ();
     } else r = true;
 }
