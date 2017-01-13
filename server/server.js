@@ -60,6 +60,9 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
+});
+
+io.on('init', function (socket) {
   socket.emit('pcs', ["ig1", "ig2", "ig3", "ig4", "ig5", "ig6", "ig7", "ig8", "ig9", "ig10"]);
 });
 

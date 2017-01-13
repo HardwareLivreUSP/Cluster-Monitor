@@ -1,7 +1,12 @@
 var socket = io.connect('http://cluster.capella.pro/');
+socket.emit('init');
 
 $(window).blur(function(e) {
-    console.log(123);
+    socket.disconnect();
+});
+
+$(window).focus(function(e) {
+    socket.connect();
 });
 
 var low;

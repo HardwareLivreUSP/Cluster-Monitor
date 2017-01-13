@@ -19,7 +19,6 @@
   "homepage": "https://github.com/capellaresumo/Cluster-Monitor#readme",
   "dependencies": {
     "express": "^4.14.0",
-    "express-fileupload": "0.0.5",
     "socket.io": "^1.7.2",
     "upload-file": "^1.2.0"
   }
