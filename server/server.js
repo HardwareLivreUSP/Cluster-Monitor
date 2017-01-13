@@ -37,7 +37,7 @@ const server_cluster = net.createServer(function(client) {
                 cpu: res[0],
                 v: values
             });
-            console.log("> recebido de " + res[0]);
+            //console.log("> recebido de " + res[0]);
         });
 
         openssl.stderr.on('data', function(data) {
@@ -131,9 +131,8 @@ upload.on('end', function(fileInfo, req, res) {
                                 }
                             });
                             programa.stdout.on('data', (saida) => {
-                                console.log(saida);
                                 io.emit('log', {
-                                    msg: saida
+                                    msg: saida.toString()
                                 });
                             });
                         } else {
