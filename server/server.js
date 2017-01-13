@@ -106,7 +106,7 @@ function run_next ()  {
             msg: "--------------------------------------------\nIniciando processo do arquivo " + fname
         });
         io.emit('log', {
-            msg: "Enviado Arquivo para cluster."
+            msg: "Enviando arquivo para cluster."
         });
         fs.createReadStream('files/' + fname).pipe(fs.createWriteStream('files/p.c'));
 
