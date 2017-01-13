@@ -9,6 +9,13 @@ $(window).focus(function(e) {
     socket.connect();
 });
 
+socket.on('log', function(info) {
+    $('textarea').append(info.msg); 
+    $('textarea').append("\n"); 
+    if($('textarea').length)
+       $('textarea').scrollTop($('textarea')[0].scrollHeight - $('textarea').height());
+});
+
 var low;
 var svg = d3.select("svg"),
     margin = {

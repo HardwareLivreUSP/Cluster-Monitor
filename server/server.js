@@ -5,6 +5,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var spawn = require('child_process').spawn;
 upload = require('jquery-file-upload-middleware');
+var spawn = require('child_process').spawn;
+var fs = require('fs');
 
 
 app.use(express.static('static'))
@@ -50,7 +52,7 @@ server_cluster.on('error',  function (err) {
 });
 
 server_cluster.listen(7001, function () {
-    console.log('server bound');
+    //console.log('server bound');
 });
 
 server.listen(8002);
@@ -83,4 +85,47 @@ app.put('/upload', function( req, res ){
 
 app.delete('/upload', function( req, res ){
     res.redirect('/');
+});
+
+upload.on('end', function (fileInfo, req, res) {
+    io.emit('log', { msg: "--------------------------------------------\nIniciando processo do arquivo "+fileInfo.name });
+    io.emit('log', { msg: "Enviado Arquivo para cluster." });
+    fs.createReadStream('files/'+fileInfo.name).pipe(fs.createWriteStream('files/p.c'));
+
+    spawn('scp', ['files/p.c', 'cluster:~/']).on('close', (code) => {
+      if(code == 0) {
+            io.emit('log', { msg: "Arquivo enviado." });
+            io.emit('log', { msg: "Copilando." });
+                spawn('ssh', ['cluster', 'mpicc', 'p.c', '-o', 'prog']).on('close', (code) => {
+                  if(code == 0) {
+                    io.emit('log', { msg: "Copiando para cada cada unidade (demora)." });
+                        spawn('ssh', ['cluster','~/.scripts/toall', 'prog']).on('close', (code) => {
+                          if(code == 0) {
+                            io.emit('log', { msg: "Copiado!. Executando programa." });
+
+
+                        var programa = spawn('ssh', ['cluster','mpirun', '--host', 'ig1,ig2,ig3,ig4,ig5,ig6,ig7,ig8,ig9,ig10', 'prog'])
+                        programa.on('close', (code) => {
+                          if(code == 0) {
+                            io.emit('log', { msg: "Copiado!." });
+                          } else {
+                            io.emit('log', { msg: "Erro ao copiar para todos." });
+                          }
+                        });
+
+                        programa.stdout.on('data', (data) => {
+                          io.emit('log', { msg: data });
+                        });
+
+
+                          } else {
+                            io.emit('log', { msg: "Erro ao copiar para todos." });
+                          }
+                        });
+                  } else {
+                    io.emit('log', { msg: "Erro ao copilar." });
+                  }
+                });
+      } 
+    });
 });
