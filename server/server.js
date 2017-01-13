@@ -4,6 +4,8 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var spawn = require('child_process').spawn;
+var Upload = require('upload-file');
+
 
 app.use(express.static('static'))
 
@@ -43,7 +45,7 @@ const server_cluster = net.createServer( function (client) {
 
 });
 
-server_cluster .on('error',  function (err) {
+server_cluster.on('error',  function (err) {
     throw err;
 });
 
@@ -59,4 +61,31 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   socket.emit('pcs', ["ig1", "ig2", "ig3", "ig4", "ig5", "ig6", "ig7", "ig8", "ig9", "ig10"]);
+});
+
+app.post('/upload', function(req, res) {
+  var upload = new Upload({
+    dest: './files',
+    maxFileSize: 100 * 1024,
+    acceptFileTypes: /(\.|\/)(c|mpi)$/i,
+    rename: function(name, file) {
+      console.log(this.fields);
+      return file.filename;
+    }
+  });
+ 
+  upload.on('end', function(fields, files) {
+    if (!fields.channel) {
+      this.cleanup();
+      this.error('Channel can not be empty');
+      return;
+    }
+    res.send('ok')
+  });
+ 
+  upload.on('error', function(err) {
+    res.send(err);
+  });
+ 
+  upload.parse(req);
 });

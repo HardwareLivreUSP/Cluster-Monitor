@@ -1,5 +1,9 @@
 var socket = io.connect('http://cluster.capella.pro/');
 
+$(window).blur(function(e) {
+    console.log(123);
+});
+
 var low;
 var svg = d3.select("svg"),
     margin = {
