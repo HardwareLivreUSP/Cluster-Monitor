@@ -8,6 +8,8 @@ upload = require('jquery-file-upload-middleware');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 
+var queue = [];
+
 
 app.use(express.static('static'))
 
@@ -91,62 +93,73 @@ app.delete('/upload', function(req, res) {
 });
 
 upload.on('end', function(fileInfo, req, res) {
-    io.emit('log', {
-        msg: "--------------------------------------------\nIniciando processo do arquivo " + fileInfo.name
-    });
-    io.emit('log', {
-        msg: "Enviado Arquivo para cluster."
-    });
-    fs.createReadStream('files/' + fileInfo.name).pipe(fs.createWriteStream('files/p.c'));
-
-    spawn('scp', ['files/p.c', 'cluster:~/']).on('close', (code) => {
-        if (code == 0) {
-            io.emit('log', {
-                msg: "Arquivo enviado."
-            });
-            io.emit('log', {
-                msg: "Copilando."
-            });
-            spawn('ssh', ['cluster', 'mpicc', 'p.c', '-o', 'prog']).on('close', (code) => {
-                if (code == 0) {
-                    io.emit('log', {
-                        msg: "Copiando para cada cada unidade (demora)."
-                    });
-                    spawn('ssh', ['cluster', '~/.scripts/toall', 'prog']).on('close', (code) => {
-                        if (code == 0) {
-                            io.emit('log', {
-                                msg: "Copiado!. Executando programa."
-                            });
-
-                            var programa = spawn('ssh', ['cluster', 'mpirun', '--host', 'ig1,ig2,ig3,ig4,ig5,ig6,ig7,ig8,ig9,ig10', 'prog'])
-                            programa.on('close', (code) => {
-                                if (code == 0) {
-                                    io.emit('log', {
-                                        msg: "Finalizado com sucesso!."
-                                    });
-                                } else {
-                                    io.emit('log', {
-                                        msg: "Erro ao executar programa."
-                                    });
-                                }
-                            });
-                            programa.stdout.on('data', (saida) => {
-                                io.emit('log', {
-                                    msg: saida.toString()
-                                });
-                            });
-                        } else {
-                            io.emit('log', {
-                                msg: "Erro ao copiar para todos."
-                            });
-                        }
-                    });
-                } else {
-                    io.emit('log', {
-                        msg: "Erro ao copilar."
-                    });
-                }
-            });
-        }
-    });
+    queue.push(fileInfo);
+    run_next ();
 });
+
+var r = true;
+function run_next ()  {
+    if (r && queue.length > 0) {
+        r = false;
+        var fname = queue.shift();
+        io.emit('log', {
+            msg: "--------------------------------------------\nIniciando processo do arquivo " + fname
+        });
+        io.emit('log', {
+            msg: "Enviado Arquivo para cluster."
+        });
+        fs.createReadStream('files/' + fname).pipe(fs.createWriteStream('files/p.c'));
+
+        spawn('scp', ['files/p.c', 'cluster:~/']).on('close', (code) => {
+            if (code == 0) {
+                io.emit('log', {
+                    msg: "Arquivo enviado."
+                });
+                io.emit('log', {
+                    msg: "Copilando."
+                });
+                spawn('ssh', ['cluster', 'mpicc', 'p.c', '-o', 'prog']).on('close', (code) => {
+                    if (code == 0) {
+                        io.emit('log', {
+                            msg: "Copiando para cada cada unidade (demora)."
+                        });
+                        spawn('ssh', ['cluster', '~/.scripts/toall', 'prog']).on('close', (code) => {
+                            if (code == 0) {
+                                io.emit('log', {
+                                    msg: "Copiado!. Executando programa."
+                                });
+
+                                var programa = spawn('ssh', ['cluster', 'mpirun', '--host', 'ig1,ig2,ig3,ig4,ig5,ig6,ig7,ig8,ig9,ig10', 'prog'])
+                                programa.on('close', (code) => {
+                                    if (code == 0) {
+                                        io.emit('log', {
+                                            msg: "Finalizado com sucesso!."
+                                        });
+                                    } else {
+                                        io.emit('log', {
+                                            msg: "Erro ao executar programa."
+                                        });
+                                    }
+                                });
+                                programa.stdout.on('data', (saida) => {
+                                    io.emit('log', {
+                                        msg: saida.toString()
+                                    });
+                                });
+                            } else {
+                                io.emit('log', {
+                                    msg: "Erro ao copiar para todos."
+                                });
+                            }
+                        });
+                    } else {
+                        io.emit('log', {
+                            msg: "Erro ao copilar."
+                        });
+                    }
+                });
+            }
+        });
+        run_next ();
+    } else r = true;
+}
