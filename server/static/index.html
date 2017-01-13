@@ -30,6 +30,7 @@
             margin-bottom: 0px;
       }
     </style>
+    <link rel="stylesheet" href="jquery.fileupload.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -68,18 +69,25 @@
 
         Além disso pode enviar outro arquivos, chamado de input.txt. Esse arquivo será o stdin do seu programa. O código copilado será executado da seguinte forma:
 
-        <span class="btn btn-success fileinput-button">
+       <hr>
+<div class="row">
+  <div class="col-md-4">
+    
+    <span class="btn btn-success fileinput-button btn-block">
         <i class="glyphicon glyphicon-plus"></i>
-        <span>Select files...</span>
+        <span>Selecionar Arquivo</span>
             <!-- The file input field used as target for the file upload widget -->
-            <input id="fileupload" type="file" name="files[]" multiple>
+            <input id="fileupload" type="file" name="files[]">
         </span>
-        <br>
-        <br>
-        <!-- The global progress bar -->
-        <div id="progress" class="progress">
+
+  </div>
+  <div class="col-md-8">
+        <div id="progress" class="progress" style="margin-top: 6px;">
             <div class="progress-bar progress-bar-success"></div>
-        </div>
+        </div></div>
+</div>
+
+        
         <!-- The container for the uploaded files -->
         <div id="files" class="files"></div>
         <br>
@@ -87,12 +95,14 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="jquery.fileupload.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="http://cluster.capella.pro/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="http://d3js.org/d3.v4.min.js"></script>
     <script src="s.js"></script>
-    <script src="jquery.fileupload.js"></script>
     <script src="fileupload.js"></script>
   </body>
 </html>

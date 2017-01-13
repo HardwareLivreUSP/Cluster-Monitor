@@ -1,5 +1,5 @@
-var socket = io.connect('http://cluster.capella.pro/');
-socket.emit('init');
+var socket = io.connect('/');
+var enable =  false;
 
 $(window).blur(function(e) {
     socket.disconnect();
@@ -38,6 +38,9 @@ var line = d3.line()
 
 
 socket.on('pcs', function(pcs_avalible) {
+
+    if (!enable) enable = true;
+    else return;
 
     var clusters = pcs_avalible.map(function(d){
       $("#tb").append("<tr><td>"+d.toUpperCase()+"</td><td><div class='progress'> <div class='progress-bar' style='width: 10%;' id=\"cpu_"+d+"\"> ... </div> </div></td></tr>");
