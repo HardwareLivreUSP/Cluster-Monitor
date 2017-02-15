@@ -5,3 +5,4 @@ keys/
 server/files/*
 hosts
 install.tar
+server_app

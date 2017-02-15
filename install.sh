@@ -37,3 +37,6 @@ while read -u10 host; do
 done 10< hosts
 
 rm install.tar
+cd server
+npm install
+ln -s server.js ../server_app
