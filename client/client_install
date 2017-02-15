@@ -1,13 +1,36 @@
 #! /bin/sh
-rm -rf /etc/clustermonitor
 rm -rf /usr/sbin/cclient
 rm -rf /etc/init.d/clustermonitor
-mkdir /etc/clustermonitor
-chmod u+x clustermonitor*
+
+chmod u+x clustermonitor
+
 cp cclient /usr/sbin/
 cp clustermonitor /etc/init.d/
-cp ../keys/server_public_key.pem /etc/clustermonitor/
-echo "Instalando cliente em $1."
-echo $1 > /etc/clustermonitor/name
-update-rc.d clustermonitor defaults
-update-rc.d clustermonitor enable
+
+if [ ! -d /etc/clustermonitor ]; then
+	mkdir /etc/clustermonitor
+fi
+
+if [ ! -d /etc/clustermonitor/tmp ]; then
+	mkdir /etc/clustermonitor/tmp
+	chmod -R 777 /etc/clustermonitor/tmp
+fi
+
+cp server.pem /etc/clustermonitor/
+cd /etc/clustermonitor/
+
+if [ ! -f private_key.pem ]; then
+	openssl genrsa -out private_key.pem 2048
+fi
+
+if [ ! -f public_key.pem ]; then
+	openssl rsa -in private_key.pem -out public_key.pem -outform PEM -pubout
+fi
+
+echo $1 > name
+echo $2 > server
+
+update-rc.d clustermonitor defaults > /dev/null
+update-rc.d clustermonitor enable > /dev/null
+
+cat /etc/clustermonitor/public_key.pem

@@ -1,7 +1,12 @@
 #!/bin/bash
 echo $(date)" Starting Script" 
 while true  
-        do
-        (cat /etc/clustermonitor/name; cat /proc/stat | grep cpu) | openssl rsautl -encrypt -inkey /etc/clustermonitor/server_public_key.pem -pubin | nc cluster.capella.pro 7001
-        sleep 1
+do
+    (cat /etc/clustermonitor/name; cat /proc/stat | grep cpu; date) > /etc/clustermonitor/tmp/data
+    openssl dgst -sha256 /etc/clustermonitor/tmp/data |\
+    openssl rsautl -sign -inkey /etc/clustermonitor/private_key.pem -keyform PEM > /etc/clustermonitor/tmp/signature
+    tar -P -zcvf /etc/clustermonitor/tmp/info /etc/clustermonitor/tmp/signature /etc/clustermonitor/tmp/data
+    server=$(cat /etc/clustermonitor/server)
+    openssl enc -base64 -in /etc/clustermonitor/tmp/info | nc $server 7001
+    sleep 1
 done  
