@@ -34,7 +34,7 @@ while read -u10 host; do
     cat /etc/clustermonitor/public_key.pem > $host.pem \
   " 2> /dev/null
   scp $host:~/$host.pem  ./keys/ 2> /dev/null > /dev/null
-done 10< hosts
+; done 10< hosts
 
 rm install.tar
 cd server
