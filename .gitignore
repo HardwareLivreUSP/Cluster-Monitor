@@ -4,3 +4,4 @@ node_modules/
 keys/
 server/files/*
 hosts
+install.tar
