@@ -21,7 +21,7 @@ tar -cvf install.tar cluster_install_client/ 2> /dev/null
 rm -rf cluster_install_client/ > /dev/null
 
 while read -u10 host; do
-  echo "-------------" $host
+  (echo "-------------" $host
   ssh-copy-id harduime@$host   2> /dev/null
   scp install.tar $host:~/  2> /dev/null > /dev/null
   ssh -t $host "\
@@ -33,8 +33,8 @@ while read -u10 host; do
   	rm -rf install.tar cluster_install_client/ &&\
     cat /etc/clustermonitor/public_key.pem > $host.pem \
   " 2> /dev/null
-  scp $host:~/$host.pem  ./keys/ 2> /dev/null > /dev/null
-; done 10< hosts
+  scp $host:~/$host.pem  ./keys/ 2> /dev/null > /dev/null) ;
+done 10< hosts
 
 rm install.tar
 cd server
