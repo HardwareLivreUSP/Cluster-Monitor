@@ -90,6 +90,7 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
     var input = fs.createReadStream('../hosts');
     readLines(input, function(data){
+        console.log(data);
         socket.emit('pcs', data);
     });
 });
