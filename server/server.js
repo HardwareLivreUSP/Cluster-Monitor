@@ -48,7 +48,7 @@ const server_cluster = net.createServer(function(client) {
             console.log(`stderr: ${data}`);
         });
 
-        openssl.stdin.write(data);
+        openssl.stdin.write(acumulador);
         openssl.stdin.end();
         
     });
