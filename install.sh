@@ -21,9 +21,7 @@ cp client/* cluster_install_client/
 tar -cvf install.tar cluster_install_client/ 2> /dev/null
 rm -rf cluster_install_client/ > /dev/null
 
-while read -u10 HOST; do
-  echo "-------------" $HOST;
-done 10< hosts
+while read -u10 HOST; do echo "-------------" $HOST; done 10< hosts
 
 rm install.tar
 cd server
