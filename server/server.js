@@ -20,7 +20,7 @@ const server_cluster = net.createServer(function(client) {
 
     client.on('end', function() {
         //console.log('client disconnected');
-        console.log(acumulador);
+        console.log(acumulador.toString());
         console.log('---------------------');
         /*
         var string = data.toString();
