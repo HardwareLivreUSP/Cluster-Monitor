@@ -16,12 +16,11 @@ app.use(express.static('static'))
 const server_cluster = net.createServer(function(client) {
     // 'connection' listener
     //console.log('client connected');
+    var acumulador = "";
 
     client.on('end', function() {
-        // console.log('client disconnected');
-    });
-
-    client.on('data', function(data) {
+         console.log('client disconnected');
+        /*
         var string = data.toString();
         client.end();
         openssl = spawn('./decode', []);
@@ -48,6 +47,11 @@ const server_cluster = net.createServer(function(client) {
 
         openssl.stdin.write(data);
         openssl.stdin.end();
+        */
+    });
+
+    client.on('data', function(data) {
+        acumulador += data;
     });
 
 });

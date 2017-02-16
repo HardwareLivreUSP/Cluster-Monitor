@@ -1,4 +1,4 @@
-var socket = io.connect('http://104.197.171.34/');
+var socket = io.connect('/');
 var enable = false;
 
 /*$(window).blur(function(e) {
