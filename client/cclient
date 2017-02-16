@@ -4,8 +4,7 @@ while true
 do
 	cd /etc/clustermonitor/tmp/
     (cat ../name; cat /proc/stat | grep cpu; date) > data
-    openssl dgst -sha256 data |\
-    openssl rsautl -sign -inkey ../private_key.pem -keyform PEM > signature
+    openssl dgst -sha256 -sign ../private_key.pem data > signature
     tar -zcvf info signature data
     server=$(cat /etc/clustermonitor/server)
     openssl enc -base64 -in info | nc $server 7001
