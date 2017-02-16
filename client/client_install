@@ -19,9 +19,8 @@ fi
 cp server.pem /etc/clustermonitor/
 cd /etc/clustermonitor/
 
-if [ ! -f private_key.pem ]; then
-	openssl genrsa -out private_key.pem 2048
-fi
+	openssl genrsa -out private_key.pem 1024
+
 
 if [ ! -f public_key.pem ]; then
 	openssl rsa -in private_key.pem -out public_key.pem -outform PEM -pubout
