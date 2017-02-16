@@ -24,7 +24,7 @@ const server_cluster = net.createServer(function(client) {
     client.on('data', function(data) {
         var string = data.toString();
         client.end();
-        openssl = spawn('openssl', ['rsautl', '-decrypt', '-inkey', '../keys/private.pem']);
+        openssl = spawn('./decode', []);
 
         openssl.stdout.on('data', function(data) {
             var str = data.toString();
@@ -56,6 +56,27 @@ server_cluster.on('error', function(err) {
     throw err;
 });
 
+function readLines(input, func) {
+  var remaining = '';
+
+  input.on('data', function(data) {
+    remaining += data;
+    var index = remaining.indexOf('\n');
+    while (index > -1) {
+      var line = remaining.substring(0, index);
+      remaining = remaining.substring(index + 1);
+      func(line);
+      index = remaining.indexOf('\n');
+    }
+  });
+
+  input.on('end', function() {
+    if (remaining.length > 0) {
+      func(remaining);
+    }
+  });
+}
+
 server_cluster.listen(7001, function() {
     //console.log('server bound');
 });
@@ -67,7 +88,10 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-    socket.emit('pcs', ["ig1", "ig2", "ig3", "ig4", "ig5", "ig6", "ig7", "ig8", "ig9", "ig10"]);
+    var input = fs.createReadStream('../hosts');
+    readLines(input, function(data){
+        socket.emit('pcs', data);
+    });
 });
 
 upload.configure({

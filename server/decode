@@ -2,6 +2,12 @@
 
 # decode [nome host] [arquivo]
 cat - | base64 --decode > input
-tar -P -zxvf input
-openssl rsautl -verify -inkey ../keys/$1.pem -keyform PEM -in signature
+tar -zxvf input > /dev/null 2> /dev/null
+
+name=$(head -n 1 data)
+
+if openssl dgst -sha256  -verify ../keys/$name.pem -keyform PEM -signature signature data > /dev/null; then
+    cat data
+fi
+
 rm signature input data
