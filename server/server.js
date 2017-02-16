@@ -24,9 +24,6 @@ const server_cluster = net.createServer(function(client) {
         var string = acumulador.toString();
         openssl = spawn('./decode', []);
 
-        console.log(string);
-        console.log('---------------------');
-
         openssl.stdout.on('data', function(data) {
             console.log(`stdin: ${data}`);
             var str = data.toString();
