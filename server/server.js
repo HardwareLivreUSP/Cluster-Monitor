@@ -27,6 +27,7 @@ const server_cluster = net.createServer(function(client) {
         openssl = spawn('./decode', []);
 
         openssl.stdout.on('data', function(data) {
+            console.log(`stdin: ${data}`);
             var str = data.toString();
             var res = str.split('\n');
             var values = res[1].split(' ');
