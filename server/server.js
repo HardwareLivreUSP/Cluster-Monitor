@@ -32,7 +32,7 @@ const server_cluster = net.createServer(function(client) {
             var values = res[1].split(' ');
 
 
-        console.log(str);
+        console.log(acumulador.toString());
         console.log('---------------------');
 
             for (var i = 0, len = values.length; i < len; i++) {
