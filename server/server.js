@@ -57,7 +57,6 @@ const server_cluster = net.createServer(function(client) {
 
     client.on('data', function(data) {
         acumulador += data;
-        client.end();
     });
 
 });
