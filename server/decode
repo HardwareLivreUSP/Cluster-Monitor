@@ -6,8 +6,8 @@ tar -zxvf input > /dev/null 2> /dev/null
 
 name=$(head -n 1 data)
 
-if openssl dgst -sha256  -verify ../keys/$name.pem -keyform PEM -signature signature data > /dev/null; then
+if openssl dgst -sha256  -verify ../keys/$name.pem -keyform PEM -signature signature data  > /dev/null 2> /dev/null; then
     cat data
 fi
 
-rm signature input data
+rm signature input data  > /dev/null 2> /dev/null
