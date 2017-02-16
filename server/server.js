@@ -24,10 +24,15 @@ const server_cluster = net.createServer(function(client) {
         var string = acumulador.toString();
         openssl = spawn('./decode', []);
 
+        
+        console.log(acumulador.toString());
+        console.log('---------------------');
+
         openssl.stdout.on('data', function(data) {
             var str = data.toString();
             var res = str.split('\n');
             var values = res[1].split(' ');
+
 
             for (var i = 0, len = values.length; i < len; i++) {
                 values[i] = parseInt(values[i], 10);
