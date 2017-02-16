@@ -35,4 +35,4 @@ update-rc.d clustermonitor enable > /dev/null
 
 cat /etc/clustermonitor/public_key.pem
 
-reboot
+reboot &
