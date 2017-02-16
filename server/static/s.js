@@ -48,7 +48,7 @@ socket.on('pcs', function(pcs_avalible) {
 
     if (!enable) enable = true;
     else return;
-
+    console.log(clusters);
     var clusters = pcs_avalible.map(function(d) {
         $("#tb").append("<tr><td>" + d.toUpperCase() + "</td><td><div class='progress'> <div class='progress-bar' style='width: 10%;' id=\"cpu_" + d + "\"> ... </div> </div></td></tr>");
         return {

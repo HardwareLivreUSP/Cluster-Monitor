@@ -58,6 +58,7 @@ server_cluster.on('error', function(err) {
 
 function readLines(input, func) {
   var remaining = '';
+  var v = [];
 
   input.on('data', function(data) {
     remaining += data;
@@ -65,14 +66,14 @@ function readLines(input, func) {
     while (index > -1) {
       var line = remaining.substring(0, index);
       remaining = remaining.substring(index + 1);
-      func(line);
+      v.push(line)
       index = remaining.indexOf('\n');
     }
   });
 
   input.on('end', function() {
     if (remaining.length > 0) {
-      func(remaining.split('\n'));
+      func(v);
     }
   });
 }
