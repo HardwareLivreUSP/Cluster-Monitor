@@ -22,7 +22,7 @@ const server_cluster = net.createServer(function(client) {
         //console.log('client disconnected');
         console.log(acumulador.toString());
         console.log('---------------------');
-        /*
+        
         var string = data.toString();
         openssl = spawn('./decode', []);
 
@@ -48,7 +48,7 @@ const server_cluster = net.createServer(function(client) {
 
         openssl.stdin.write(data);
         openssl.stdin.end();
-        */
+        
     });
 
     client.on('data', function(data) {
