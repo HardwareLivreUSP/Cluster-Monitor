@@ -1,8 +1,9 @@
 #/bin/bash
 
 # decode [nome host] [arquivo]
-if cat - | base64 --decode > input  2> /dev/null && tar -zxvf input; then
+if cat - | base64 --decode > input  2> /dev/null && tar -zxvf input > /dev/null 2> /dev/null; then
 	name=$(head -n 1 data)
+	echo $name
 
 	if openssl dgst -sha256  -verify ../keys/$name.pem -keyform PEM -signature signature data  > /dev/null 2> /dev/null; then
 	    cat data
