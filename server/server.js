@@ -70,7 +70,7 @@ function readLines(input, func) {
     while (index > -1) {
       var line = remaining.substring(0, index);
       remaining = remaining.substring(index + 1);
-      v.push(line)
+      if (line.length > 0 && line != " ") v.push(line);
       index = remaining.indexOf('\n');
     }
   });
