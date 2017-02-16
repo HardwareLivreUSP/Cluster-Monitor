@@ -23,7 +23,7 @@ rm -rf cluster_install_client/ > /dev/null
 
 while read -u10 HOST; do
   echo "-------------" $HOST;
-  scp $HOST:/etc/clustermonitor/public_key.pem  ./keys/ 2> /dev/null > /dev/null;
+  scp $HOST:/etc/clustermonitor/public_key.pem  ./keys/$HOST.pem 2> /dev/null > /dev/null;
 done 10< hosts
 
 rm install.tar
