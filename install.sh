@@ -21,7 +21,21 @@ cp client/* cluster_install_client/
 tar -cvf install.tar cluster_install_client/ 2> /dev/null
 rm -rf cluster_install_client/ > /dev/null
 
-while read -u10 HOST; do echo "-------------" $HOST; done 10< hosts;
+while read -u10 HOST; do
+  echo "-------------" $HOST;
+  ssh-copy-id $USER@$HOST   2> /dev/null;
+  scp install.tar $HOST:~/  2> /dev/null > /dev/null;
+  ssh -t $HOST "\
+  	tar -xvf install.tar > /dev/null 2> /dev/null && \
+  	cd cluster_install_client/ && \
+  	chmod 777 client_install && \
+  	sudo sh client_install $HOST $SERVER && \
+  	cd && \
+  	rm -rf install.tar cluster_install_client/ &&\
+    cat /etc/clustermonitor/public_key.pem > $HOST.pem \
+  " 2> /dev/null;
+  scp $HOST:~/$HOST.pem  ./keys/ 2> /dev/null > /dev/null;
+done 10< hosts
 
 rm install.tar
 cd server
