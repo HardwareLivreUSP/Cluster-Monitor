@@ -1,0 +1,7 @@
+#/bin/bash
+
+# decode [nome host] [arquivo]
+cat - | base64 --decode > input
+tar -P -zxvf input
+openssl rsautl -verify -inkey ../keys/$1.pem -keyform PEM -in signature
+rm signature input data

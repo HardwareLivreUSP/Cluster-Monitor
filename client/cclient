@@ -2,11 +2,12 @@
 echo $(date)" Starting Script" 
 while true  
 do
-    (cat /etc/clustermonitor/name; cat /proc/stat | grep cpu; date) > /etc/clustermonitor/tmp/data
-    openssl dgst -sha256 /etc/clustermonitor/tmp/data |\
-    openssl rsautl -sign -inkey /etc/clustermonitor/private_key.pem -keyform PEM > /etc/clustermonitor/tmp/signature
-    tar -P -zcvf /etc/clustermonitor/tmp/info /etc/clustermonitor/tmp/signature /etc/clustermonitor/tmp/data
+	cd /etc/clustermonitor/tmp/
+    (cat ../name; cat /proc/stat | grep cpu; date) > data
+    openssl dgst -sha256 data |\
+    openssl rsautl -sign -inkey ../private_key.pem -keyform PEM > signature
+    tar --absolute-names -zcvf info signature data
     server=$(cat /etc/clustermonitor/server)
-    openssl enc -base64 -in /etc/clustermonitor/tmp/info | nc $server 7001
+    openssl enc -base64 -in info | nc $server 7001
     sleep 1
 done  
