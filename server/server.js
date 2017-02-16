@@ -72,7 +72,7 @@ function readLines(input, func) {
   });
 
   input.on('end', function() {
-    if (remaining.length > 0) {
+    if (v.length > 0) {
       func(v);
     }
   });
