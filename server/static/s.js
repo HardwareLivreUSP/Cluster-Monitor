@@ -184,7 +184,7 @@ socket.on('pcs', function(pcs_avalible) {
 
         clusters.forEach(function(ca) {
             if (ca.values.length >= 1) {
-                if (now.getTime() - ca.values[ca.values.length - 1].date.getTime() > 3300) {
+                if (now.getTime() - ca.values[ca.values.length - 1].date.getTime() > 3600) {
                     $("#cpu_" + ca.id).addClass("progress-bar-warning");
                 } else {
                     $("#cpu_" + ca.id).removeClass("progress-bar-warning");
