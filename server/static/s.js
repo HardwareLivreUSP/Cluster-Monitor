@@ -108,8 +108,8 @@ socket.on('pcs', function(pcs_avalible) {
             console.log("Placa não cadastrada.");
         } else {
             var ca = clusters[index];
-            console.log(data);
-            ca.in.push(parseFloat(data.v));
+            ca.in.push(data.v);
+            console.log(ca);
 
             if (ca.in.length >= 2) {
                 if (ca.in.length > 2) ca.in.shift();
