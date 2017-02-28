@@ -9,6 +9,7 @@ fi
 
 if [ ! -f keys/private.pem ]; then
   openssl genrsa -out keys/private.pem 2048 2> /dev/null
+  openssl rsa -in keys/private.pem -out keys/public.pem -outform PEM -pubout 2> /dev/null
 fi
 
 if [ ! -f keys/public.pem ]; then
