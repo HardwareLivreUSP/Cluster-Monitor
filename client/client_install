@@ -13,7 +13,7 @@ fi
 
 if [ ! -d /etc/clustermonitor/tmp ]; then
 	mkdir /etc/clustermonitor/tmp
-	chmod -R 777 /etc/clustermonitor/tmp
+	chmod 777 -R /etc/clustermonitor/tmp
 fi
 
 cp server.pem /etc/clustermonitor/
@@ -33,5 +33,7 @@ update-rc.d clustermonitor defaults > /dev/null
 update-rc.d clustermonitor enable > /dev/null
 
 cat /etc/clustermonitor/public_key.pem
+
+chmod 777 -R /etc/clustermonitor/tmp
 
 reboot &
