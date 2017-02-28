@@ -153,7 +153,7 @@ socket.on('pcs', function(pcs_avalible) {
 
                 var CPU_Percentage = (totald - idled) / totald * 100;
 
-                if (!isNaN(+CPU_Percentage)) { // convert string to number
+                if (&&!isNaN(+CPU_Percentage)) { // convert string to number
                     ca.values.push({
                         value: +CPU_Percentage,
                         date: new Date()
@@ -184,7 +184,7 @@ socket.on('pcs', function(pcs_avalible) {
 
         clusters.forEach(function(ca) {
             if (ca.values.length >= 1) {
-                if (now.getTime() - ca.values[ca.values.length - 1].date.getTime() > 3600) {
+                if (now.getTime() - ca.values[ca.values.length - 1].date.getTime() > 4000) {
                     $("#cpu_" + ca.id).addClass("progress-bar-warning");
                 } else {
                     $("#cpu_" + ca.id).removeClass("progress-bar-warning");
