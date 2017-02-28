@@ -154,10 +154,12 @@ socket.on('pcs', function(pcs_avalible) {
 
                 var CPU_Percentage = (totald - idled) / totald * 100;
 
-                ca.values.push({
-                    value: CPU_Percentage,
-                    date: new Date()
-                });
+                if (!isNaN(CPU_Percentage)) {
+                    ca.values.push({
+                        value: CPU_Percentage,
+                        date: new Date()
+                    });
+                }
 
                 $("#cpu_" + ca.id).text(CPU_Percentage.toFixed(2));
                 $("#cpu_" + ca.id).width(CPU_Percentage.toFixed(0) + "%");
