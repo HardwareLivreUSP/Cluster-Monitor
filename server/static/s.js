@@ -153,7 +153,7 @@ socket.on('pcs', function(pcs_avalible) {
 
                 var CPU_Percentage = (totald - idled) / totald * 100;
 
-                if (&&!isNaN(+CPU_Percentage)) { // convert string to number
+                if (!isNaN(+CPU_Percentage)) { // convert string to number
                     ca.values.push({
                         value: +CPU_Percentage,
                         date: new Date()
