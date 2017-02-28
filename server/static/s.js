@@ -104,11 +104,12 @@ socket.on('pcs', function(pcs_avalible) {
 
 
         var index = pcs_avalible.indexOf(data.cpu);
-        if (index == -1 || isNaN(clusters[index].v)) {
+        if (index == -1 || isNaN(parseFloat(clusters[index].v))) {
             console.log("Placa não cadastrada.");
         } else {
             var ca = clusters[index];
-            ca.in.push(data.v);
+            console.log(data);
+            ca.in.push(parseFloat(data.v));
 
             if (ca.in.length >= 2) {
                 if (ca.in.length > 2) ca.in.shift();
