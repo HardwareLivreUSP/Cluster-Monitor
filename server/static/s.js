@@ -109,7 +109,6 @@ socket.on('pcs', function(pcs_avalible) {
         } else {
             var ca = clusters[index];
             ca.in.push(data.v);
-            console.log(ca);
 
             if (ca.in.length >= 2) {
                 if (ca.in.length > 2) ca.in.shift();
@@ -154,9 +153,9 @@ socket.on('pcs', function(pcs_avalible) {
 
                 var CPU_Percentage = (totald - idled) / totald * 100;
 
-                if (!isNaN(CPU_Percentage)) {
+                if (!isNaN(+CPU_Percentage)) { // convert string to number
                     ca.values.push({
-                        value: CPU_Percentage,
+                        value: +CPU_Percentage,
                         date: new Date()
                     });
                 }
