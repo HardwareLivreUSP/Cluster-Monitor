@@ -1,3 +1,0 @@
-echo oi tudo bem? > tmp
-openssl dgst -sha256 -sign ../keys/private.pem tmp > x
-openssl dgst -sha256  -verify ../keys/public.pem -keyform PEM -signature x tmp

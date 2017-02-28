@@ -7,11 +7,11 @@ if [ ! -d ./keys ]; then
   mkdir ./keys
 fi
 
-if [ ! -f keys/private_key.pem ]; then
+if [ ! -f keys/private.pem ]; then
   openssl genrsa -out keys/private.pem 2048 2> /dev/null
 fi
 
-if [ ! -f keys/public_key.pem ]; then
+if [ ! -f keys/public.pem ]; then
   openssl rsa -in keys/private.pem -out keys/public.pem -outform PEM -pubout 2> /dev/null
 fi
 
