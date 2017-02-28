@@ -7,6 +7,6 @@ do
     openssl dgst -sha256 -sign ../private_key.pem data > signature
     tar -zcvf info signature data
     server=$(cat /etc/clustermonitor/server)
-    cat info | nc -q 0 $server 7001
+    openssl enc -base64 -in info | nc -q 0 $server 7001
     sleep 1
 done  
