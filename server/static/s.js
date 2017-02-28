@@ -104,7 +104,7 @@ socket.on('pcs', function(pcs_avalible) {
 
 
         var index = pcs_avalible.indexOf(data.cpu);
-        if (index == -1 || isNaN(parseFloat(clusters[index].v))) {
+        if (index == -1) {
             console.log("Placa não cadastrada.");
         } else {
             var ca = clusters[index];
